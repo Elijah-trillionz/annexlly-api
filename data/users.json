@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "01GQHS6WHVRV7Y24PWANZWSH3N",
+      "email": "onlinedailyblog@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/AEdFTp5zx-RJOmqkF6SDjR2fCkq0gn7-hF9pBkBP9thQ=s96-c",
+      "name": "Online Daily Blog"
+    },
+    {
+      "id": "01GQHSK1ER2W6K6SG56RQC6W54",
+      "email": "elijahtrillionz@gmail.com",
+      "picture": "https://lh3.googleusercontent.com/a/AEdFTp7sYhkcn1K7HFDKj6UE8vhTDJFga0j-MvWkZIDL=s96-c",
+      "name": "Elijah Agbonze"
+    }
+  ]
+}
