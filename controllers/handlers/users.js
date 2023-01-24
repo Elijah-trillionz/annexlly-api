@@ -102,4 +102,33 @@ const getSignedInUserHandler = async (req, reply) => {
   }
 };
 
-module.exports = { registerViaGoogleHandler, getSignedInUserHandler };
+const updateUsernameHandler = async (req, reply) => {
+  const { id } = req.user;
+  const { username } = req.body;
+  try {
+    const usernameExists = await Users.findOne({ username });
+    if (usernameExists && usernameExists.id !== id) {
+      return sendError(
+        400,
+        "This username is already in use by someone else",
+        reply
+      );
+    } else if (usernameExists && usernameExists.id === id) {
+      return sendError(400, "This username is already in use by you", reply);
+    }
+
+    await Users.findOneAndUpdate({ id }, { username });
+    reply.send({ msg: "Username updated" });
+  } catch (e) {
+    if (e?.errorCode === 612) {
+      return sendError(401, "This user does not exist", reply);
+    }
+    return sendError(500, "Server error", reply);
+  }
+};
+
+module.exports = {
+  registerViaGoogleHandler,
+  getSignedInUserHandler,
+  updateUsernameHandler,
+};

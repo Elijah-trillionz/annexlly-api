@@ -18,14 +18,16 @@ const registerViaGoogleSchema = {
   },
 };
 
-const getSignedInUserSchema = {
-  headers: {
-    type: "object",
-    required: ["access_token"],
-    properties: {
-      access_token: typeString,
-    },
+const UserAccessSchema = {
+  type: "object",
+  required: ["access_token"],
+  properties: {
+    access_token: typeString,
   },
+};
+
+const getSignedInUserSchema = {
+  headers: UserAccessSchema,
   response: {
     200: {
       type: "object",
@@ -41,4 +43,27 @@ const getSignedInUserSchema = {
   },
 };
 
-module.exports = { registerViaGoogleSchema, getSignedInUserSchema };
+const updateUsernameSchema = {
+  headers: UserAccessSchema,
+  body: {
+    type: "object",
+    required: ["username"],
+    properties: {
+      username: typeString,
+    },
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        msg: typeString,
+      },
+    },
+  },
+};
+
+module.exports = {
+  registerViaGoogleSchema,
+  getSignedInUserSchema,
+  updateUsernameSchema,
+};

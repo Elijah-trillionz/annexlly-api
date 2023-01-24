@@ -1,10 +1,13 @@
 const {
   registerViaGoogleSchema,
   getSignedInUserSchema,
+  updateUsernameSchema,
 } = require("../controllers/schemas/users");
+
 const {
   registerViaGoogleHandler,
   getSignedInUserHandler,
+  updateUsernameHandler,
 } = require("../controllers/handlers/users");
 
 const registerViaGoogleOpts = {
@@ -15,6 +18,11 @@ const registerViaGoogleOpts = {
 const getSignedInUserOpts = {
   schema: getSignedInUserSchema,
   handler: getSignedInUserHandler,
+};
+
+const updateUsernameOpts = {
+  schema: updateUsernameSchema,
+  handler: updateUsernameHandler,
 };
 
 const usersRoutes = (fastify, opts, done) => {
@@ -38,7 +46,10 @@ const userPrivateRoutes = (fastify) => {
     ...getSignedInUserOpts,
   });
 
-  // change username
+  fastify.put("/update-username", {
+    preHandler: fastify.auth([fastify.verifyUserToken]),
+    ...updateUsernameOpts,
+  });
 };
 
 module.exports = usersRoutes;
