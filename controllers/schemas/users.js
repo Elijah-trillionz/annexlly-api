@@ -66,4 +66,5 @@ module.exports = {
   registerViaGoogleSchema,
   getSignedInUserSchema,
   updateUsernameSchema,
+  UserAccessSchema,
 };

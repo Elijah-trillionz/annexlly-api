@@ -131,4 +131,5 @@ module.exports = {
   registerViaGoogleHandler,
   getSignedInUserHandler,
   updateUsernameHandler,
+  sendError,
 };
