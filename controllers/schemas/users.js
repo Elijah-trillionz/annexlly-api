@@ -34,6 +34,8 @@ const getSignedInUserSchema = {
         id: typeString,
         picture: typeString,
         email: typeString,
+        createdAt: { type: "string", format: "date-time" },
+        username: typeString,
       },
     },
   },

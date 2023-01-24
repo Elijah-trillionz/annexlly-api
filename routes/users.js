@@ -37,6 +37,8 @@ const userPrivateRoutes = (fastify) => {
     preHandler: fastify.auth([fastify.verifyUserToken]),
     ...getSignedInUserOpts,
   });
+
+  // change username
 };
 
 module.exports = usersRoutes;

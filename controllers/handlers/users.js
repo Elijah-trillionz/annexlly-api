@@ -23,6 +23,8 @@ const registerViaGoogleHandler = async (req, reply) => {
         email,
         picture,
         name,
+        username: "",
+        createdAt: new Date().toISOString(),
       });
     } else {
       id = userExists.id;
