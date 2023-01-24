@@ -3,6 +3,10 @@ const Users = require("../../models/Users");
 const { ulid } = require("ulid");
 const jwt = require("jsonwebtoken");
 
+const sendError = (statusCode, msg, replyCb) => {
+  return replyCb.status(statusCode).send(new Error(msg));
+};
+
 const registerViaGoogleHandler = async (req, reply) => {
   const { code } = req.query;
   try {
@@ -79,8 +83,21 @@ const getUserProfile = async (accessToken) => {
   }
 };
 
-const sendError = (statusCode, msg, replyCb) => {
-  return replyCb.status(statusCode).send(new Error(msg));
+const getSignedInUserHandler = async (req, reply) => {
+  const { id } = req.user;
+  try {
+    const user = await Users.findOne({ id });
+    if (!user)
+      return sendError(
+        401,
+        "This user does not exist. Account may have been deleted",
+        reply
+      );
+
+    reply.send(user);
+  } catch (e) {
+    sendError(500, "Server error", reply);
+  }
 };
 
-module.exports = { registerViaGoogleHandler };
+module.exports = { registerViaGoogleHandler, getSignedInUserHandler };

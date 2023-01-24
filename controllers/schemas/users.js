@@ -18,4 +18,25 @@ const registerViaGoogleSchema = {
   },
 };
 
-module.exports = { registerViaGoogleSchema };
+const getSignedInUserSchema = {
+  headers: {
+    type: "object",
+    required: ["access_token"],
+    properties: {
+      access_token: typeString,
+    },
+  },
+  response: {
+    200: {
+      type: "object",
+      properties: {
+        name: typeString,
+        id: typeString,
+        picture: typeString,
+        email: typeString,
+      },
+    },
+  },
+};
+
+module.exports = { registerViaGoogleSchema, getSignedInUserSchema };

@@ -1,10 +1,13 @@
 const app = require("fastify")({ logger: true });
+const { verifyUserToken } = require("./auth/verifyUserToken");
 const PORT = process.env.PORT || 5002;
 require("dotenv").config();
 
 app.register(require("@fastify/cors"), {
   origin: ["http://localhost:3000"],
 });
+
+app.decorate("verifyUserToken", verifyUserToken);
 
 // register routes
 app.register(require("./routes/users"), { prefix: "/api/users" });
