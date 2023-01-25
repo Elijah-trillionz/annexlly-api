@@ -106,6 +106,9 @@ const updateUsernameHandler = async (req, reply) => {
   const { id } = req.user;
   const { username } = req.body;
   try {
+    if (!username)
+      return sendError(400, "Username property must have a value", reply);
+
     const usernameExists = await Users.findOne({ username });
     if (usernameExists && usernameExists.id !== id) {
       return sendError(

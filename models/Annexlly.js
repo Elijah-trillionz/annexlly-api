@@ -1,16 +1,16 @@
 const { JSONDB } = require("native-json-db");
 const typeString = { type: "string" };
 
-const Affiliates = new JSONDB("affiliates");
+const Annexlly = new JSONDB("annexlly");
 
 const schema = {
   type: "object",
-  required: ["name", "id", "defaultUrl", "newUrl", "numOfClicks", "userId"],
+  required: ["name", "id", "defaultUrl", "newPath", "numOfClicks", "userId"],
   properties: {
     name: typeString,
     defaultUrl: typeString,
     id: typeString,
-    newUrl: typeString,
+    newPath: typeString,
     numOfClicks: { type: "number" },
     createdAt: { type: "string", format: "date-time" },
     userId: typeString,
@@ -18,7 +18,7 @@ const schema = {
 };
 
 (async () => {
-  await Affiliates.connect(schema, { indentSpace: 2 });
+  await Annexlly.connect(schema, { indentSpace: 2 });
 })();
 
-module.exports = Affiliates;
+module.exports = Annexlly;
