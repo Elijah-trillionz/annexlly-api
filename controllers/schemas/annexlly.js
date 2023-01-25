@@ -14,6 +14,13 @@ const AnnexllySchema = {
   },
 };
 
+const SimpleResSchema = {
+  type: "object",
+  properties: {
+    msg: typeString,
+  },
+};
+
 const getAllAnnexllySchema = {
   headers: UserAccessSchema,
   response: {
@@ -34,23 +41,41 @@ const getAnnexllySchema = {
   },
 };
 
+const AnnexllyBodySchema = {
+  type: "object",
+  required: ["name", "defaultUrl"],
+  properties: {
+    name: typeString,
+    defaultUrl: typeString,
+  },
+};
+
 const createAnnexllySchema = {
   headers: UserAccessSchema,
-  body: {
-    type: "object",
-    required: ["name", "defaultUrl"],
-    properties: {
-      name: typeString,
-      defaultUrl: typeString,
-    },
+  body: AnnexllyBodySchema,
+  response: {
+    200: SimpleResSchema,
+  },
+};
+
+const updateAnnexllySchema = {
+  headers: UserAccessSchema,
+  params: {
+    id: typeString,
+  },
+  body: AnnexllyBodySchema,
+  response: {
+    200: SimpleResSchema,
+  },
+};
+
+const deleteAnnexllySchema = {
+  headers: UserAccessSchema,
+  params: {
+    id: typeString,
   },
   response: {
-    200: {
-      type: "object",
-      properties: {
-        msg: typeString,
-      },
-    },
+    200: SimpleResSchema,
   },
 };
 
@@ -58,4 +83,6 @@ module.exports = {
   getAllAnnexllySchema,
   getAnnexllySchema,
   createAnnexllySchema,
+  updateAnnexllySchema,
+  deleteAnnexllySchema,
 };
