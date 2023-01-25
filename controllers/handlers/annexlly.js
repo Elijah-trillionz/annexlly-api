@@ -155,10 +155,30 @@ const deleteAnnexllyHandler = async (req, reply) => {
   }
 };
 
+const incrementNumOfClicksHandler = async (req, reply) => {
+  const { id: userId } = req.user;
+  const { id } = req.params;
+
+  try {
+    await Annexlly.findOneAndUpdate(
+      { id, userId },
+      { $inc: { numOfClicks: 1 } }
+    );
+
+    return reply.send({ msg: "successfully incremented" });
+  } catch (e) {
+    if (e?.errorCode === 612) {
+      return sendError(404, "This annexlly link does not exist", reply);
+    }
+    return sendError(500, "Server error", reply);
+  }
+};
+
 module.exports = {
   getAllAnnexllyHandler,
   getAnnexllyHandler,
   createAnnexllyHandler,
   updateAnnexllyHandler,
   deleteAnnexllyHandler,
+  incrementNumOfClicksHandler,
 };

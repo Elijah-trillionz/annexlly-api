@@ -79,10 +79,21 @@ const deleteAnnexllySchema = {
   },
 };
 
+const incrementNumOfClicksSchema = {
+  headers: UserAccessSchema,
+  params: {
+    id: typeString,
+  },
+  response: {
+    200: SimpleResSchema,
+  },
+};
+
 module.exports = {
   getAllAnnexllySchema,
   getAnnexllySchema,
   createAnnexllySchema,
   updateAnnexllySchema,
   deleteAnnexllySchema,
+  incrementNumOfClicksSchema,
 };

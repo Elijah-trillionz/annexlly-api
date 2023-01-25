@@ -4,6 +4,7 @@ const {
   createAnnexllySchema,
   updateAnnexllySchema,
   deleteAnnexllySchema,
+  incrementNumOfClicksSchema,
 } = require("../controllers/schemas/annexlly");
 const {
   getAllAnnexllyHandler,
@@ -11,6 +12,7 @@ const {
   createAnnexllyHandler,
   updateAnnexllyHandler,
   deleteAnnexllyHandler,
+  incrementNumOfClicksHandler,
 } = require("../controllers/handlers/annexlly");
 
 const getAllAnnexllyOpts = {
@@ -36,6 +38,11 @@ const updateAnnexllyOpts = {
 const deleteAnnexllyOpts = {
   schema: deleteAnnexllySchema,
   handler: deleteAnnexllyHandler,
+};
+
+const incrementNumOfClicksOpts = {
+  schema: incrementNumOfClicksSchema,
+  handler: incrementNumOfClicksHandler,
 };
 
 const affiliatesRoutes = (fastify, opts, done) => {
@@ -72,7 +79,10 @@ const affiliatePrivateRoutes = (fastify) => {
     ...deleteAnnexllyOpts,
   });
 
-  // update num of clicks
+  fastify.put("/increment-clicks/:id", {
+    preHandler: fastify.auth([fastify.verifyUserToken]),
+    ...incrementNumOfClicksOpts,
+  });
 };
 
 module.exports = affiliatesRoutes;
