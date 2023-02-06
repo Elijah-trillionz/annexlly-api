@@ -24,7 +24,6 @@ const registerViaGoogleHandler = async (req, reply) => {
         picture,
         name,
         username: "",
-        createdAt: new Date().toISOString(),
       });
     } else {
       id = userExists.id;
@@ -120,12 +119,15 @@ const updateUsernameHandler = async (req, reply) => {
       return sendError(400, "This username is already in use by you", reply);
     }
 
-    await Users.findOneAndUpdate({ id }, { username });
+    const user = await Users.findOneAndUpdate({ id }, { username });
+    if (!user)
+      return sendError(
+        401,
+        "This user does not exist. Account may have been deleted",
+        reply
+      );
     reply.send({ msg: "Username updated" });
   } catch (e) {
-    if (e?.errorCode === 612) {
-      return sendError(401, "This user does not exist", reply);
-    }
     return sendError(500, "Server error", reply);
   }
 };

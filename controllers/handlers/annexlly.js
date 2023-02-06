@@ -6,7 +6,7 @@ const { ulid } = require("ulid");
 const getAllAnnexllyHandler = async (req, reply) => {
   const { id: userId } = req.user;
   try {
-    const annexlly = await Annexlly.findMany({ userId });
+    const annexlly = await Annexlly.find({ userId });
     if (annexlly.length <= 0)
       return sendError(404, "You have no annexlly links yet", reply);
 
@@ -72,7 +72,6 @@ const createAnnexllyHandler = async (req, reply) => {
       id,
       newPath,
       defaultUrl,
-      createdAt: new Date().toISOString(),
       userId,
       numOfClicks: 0,
       name: formattedName,
@@ -160,16 +159,16 @@ const incrementNumOfClicksHandler = async (req, reply) => {
   const { id } = req.params;
 
   try {
-    await Annexlly.findOneAndUpdate(
+    const annexlly = await Annexlly.findOneAndUpdate(
       { id, userId },
       { $inc: { numOfClicks: 1 } }
     );
 
+    if (!annexlly)
+      return sendError(404, "This annexlly link does not exist", reply);
+
     return reply.send({ msg: "successfully incremented" });
   } catch (e) {
-    if (e?.errorCode === 612) {
-      return sendError(404, "This annexlly link does not exist", reply);
-    }
     return sendError(500, "Server error", reply);
   }
 };
