@@ -21,6 +21,20 @@ const SimpleResSchema = {
   },
 };
 
+const redirectAnnexllySchema = {
+  params: {
+    type: "object",
+    required: ["annexllyname", "username"],
+    properties: {
+      annexllyname: typeString,
+      username: typeString,
+    },
+  },
+  response: {
+    200: SimpleResSchema,
+  },
+};
+
 const getAllAnnexllySchema = {
   headers: UserAccessSchema,
   response: {
@@ -90,6 +104,7 @@ const incrementNumOfClicksSchema = {
 };
 
 module.exports = {
+  redirectAnnexllySchema,
   getAllAnnexllySchema,
   getAnnexllySchema,
   createAnnexllySchema,

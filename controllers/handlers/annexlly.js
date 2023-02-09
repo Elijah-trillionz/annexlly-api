@@ -2,6 +2,25 @@ const { sendError } = require("./users");
 const Annexlly = require("../../models/Annexlly");
 const Users = require("../../models/Users");
 const { ulid } = require("ulid");
+const validUrl = require("valid-url");
+
+const redirectAnnexllyHandler = async (req, reply) => {
+  const { username, annexllyname } = req.params;
+  try {
+    const user = await Users.findOne({ username });
+    if (!user) return sendError(400, "No url found", reply);
+
+    const annexlly = await Annexlly.findOne({
+      userId: user.id,
+      name: annexllyname,
+    });
+    if (!annexlly) return sendError(400, "No url found", reply);
+    console.log(annexlly.defaultUrl);
+    reply.redirect(annexlly.defaultUrl);
+  } catch (e) {
+    return sendError(500, "Server error", reply);
+  }
+};
 
 const getAllAnnexllyHandler = async (req, reply) => {
   const { id: userId } = req.user;
@@ -36,6 +55,9 @@ const createAnnexllyHandler = async (req, reply) => {
   const { name, defaultUrl } = req.body;
 
   try {
+    if (!validUrl.isWebUri(defaultUrl))
+      return sendError(400, "Url is not valid", reply);
+
     const formattedName = name.replaceAll(" ", "-");
     const annexllyNameExists = await Annexlly.findOne({
       name: formattedName,
@@ -174,6 +196,7 @@ const incrementNumOfClicksHandler = async (req, reply) => {
 };
 
 module.exports = {
+  redirectAnnexllyHandler,
   getAllAnnexllyHandler,
   getAnnexllyHandler,
   createAnnexllyHandler,
