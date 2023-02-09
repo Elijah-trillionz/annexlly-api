@@ -3,21 +3,28 @@ const Annexlly = require("../../models/Annexlly");
 const Users = require("../../models/Users");
 const { ulid } = require("ulid");
 const validUrl = require("valid-url");
+const fs = require("fs");
+
+const noUrlFoundErr = (reply) => {
+  const stream = fs.createReadStream("./public/404.html");
+  return reply.type("text/html").send(stream);
+};
 
 const redirectAnnexllyHandler = async (req, reply) => {
   const { username, annexllyname } = req.params;
   try {
     const user = await Users.findOne({ username });
-    if (!user) return sendError(400, "No url found", reply);
+    if (!user) return noUrlFoundErr(reply);
 
     const annexlly = await Annexlly.findOne({
       userId: user.id,
       name: annexllyname,
     });
-    if (!annexlly) return sendError(400, "No url found", reply);
-    console.log(annexlly.defaultUrl);
+    if (!annexlly) return noUrlFoundErr(reply);
+
     reply.redirect(annexlly.defaultUrl);
   } catch (e) {
+    console.log(e);
     return sendError(500, "Server error", reply);
   }
 };

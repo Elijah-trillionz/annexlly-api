@@ -3,6 +3,7 @@ const { verifyUserToken } = require("./auth/verifyUserToken");
 const connectDB = require("./config/db");
 const { redirectAnnexllySchema } = require("./controllers/schemas/annexlly");
 const { redirectAnnexllyHandler } = require("./controllers/handlers/annexlly");
+const fs = require("fs");
 const PORT = process.env.PORT || 5002;
 require("dotenv").config();
 connectDB();
@@ -12,6 +13,10 @@ app.register(require("@fastify/cors"), {
 });
 
 app.decorate("verifyUserToken", verifyUserToken);
+app.decorateReply("sendFile", (filename) => {
+  const stream = fs.createReadStream(filename);
+  this.type("text/html").send(stream);
+});
 
 // register routes
 app.register(require("./routes/users"), { prefix: "/api/users" });
