@@ -5,8 +5,8 @@ const { ulid } = require("ulid");
 const validUrl = require("valid-url");
 const fs = require("fs");
 
-const noUrlFoundErr = (reply) => {
-  const stream = fs.createReadStream("./public/404.html");
+const renderStaticPageAsErrRes = (pageUrl, reply) => {
+  const stream = fs.createReadStream(`./public/${pageUrl}`);
   return reply.type("text/html").send(stream);
 };
 
@@ -14,18 +14,17 @@ const redirectAnnexllyHandler = async (req, reply) => {
   const { username, annexllyname } = req.params;
   try {
     const user = await Users.findOne({ username });
-    if (!user) return noUrlFoundErr(reply);
+    if (!user) return renderStaticPageAsErrRes("404.html", reply);
 
     const annexlly = await Annexlly.findOne({
       userId: user.id,
       name: annexllyname,
     });
-    if (!annexlly) return noUrlFoundErr(reply);
+    if (!annexlly) return renderStaticPageAsErrRes("404.html", reply);
 
     reply.redirect(annexlly.defaultUrl);
   } catch (e) {
-    console.log(e);
-    return sendError(500, "Server error", reply);
+    return renderStaticPageAsErrRes("500.html", reply);
   }
 };
 
