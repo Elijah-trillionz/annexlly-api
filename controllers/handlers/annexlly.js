@@ -66,9 +66,8 @@ const createAnnexllyHandler = async (req, reply) => {
     if (!validUrl.isWebUri(defaultUrl))
       return sendError(400, "Url is not valid", reply);
 
-    const formattedName = name.replaceAll(" ", "-");
     const annexllyNameExists = await Annexlly.findOne({
-      name: formattedName,
+      name,
       userId,
     });
     if (annexllyNameExists?.id)
@@ -97,19 +96,18 @@ const createAnnexllyHandler = async (req, reply) => {
       );
 
     const id = ulid();
-    const newPath = `/${user.username}/${formattedName}`;
+    const newPath = `/${user.username}/${name}`;
     await Annexlly.create({
       id,
       newPath,
       defaultUrl,
       userId,
       numOfClicks: 0,
-      name: formattedName,
+      name,
     });
 
     return reply.send({ msg: "successfully created" });
   } catch (e) {
-    console.log(e);
     return sendError(500, "Server error", reply);
   }
 };
@@ -124,9 +122,8 @@ const updateAnnexllyHandler = async (req, reply) => {
     if (!annexlly)
       return sendError(404, "This annexlly link does not exist", reply);
 
-    const formattedName = name.replaceAll(" ", "-");
     const annexllyNameExists = await Annexlly.findOne({
-      name: formattedName,
+      name,
       userId,
     });
     if (annexllyNameExists && annexllyNameExists.id !== id)
@@ -154,13 +151,13 @@ const updateAnnexllyHandler = async (req, reply) => {
         reply
       );
 
-    const newPath = `/${user.username}/${formattedName}`;
+    const newPath = `/${user.username}/${name}`;
     await Annexlly.findOneAndUpdate(
       { id },
       {
         newPath,
         defaultUrl,
-        name: formattedName,
+        name,
       }
     );
 
