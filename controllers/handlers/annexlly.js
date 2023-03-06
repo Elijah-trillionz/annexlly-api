@@ -59,6 +59,7 @@ const createAnnexllyHandler = async (req, reply) => {
   const { name, defaultUrl } = req.body;
 
   try {
+    const formattedName = name.toLowerCase();
     const userAnnexlly = await Annexlly.find({ userId });
     if (userAnnexlly.length >= 3)
       return sendError(400, "You have created your maximum annexlly", reply);
@@ -67,7 +68,7 @@ const createAnnexllyHandler = async (req, reply) => {
       return sendError(400, "Url is not valid", reply);
 
     const annexllyNameExists = await Annexlly.findOne({
-      name,
+      name: formattedName,
       userId,
     });
     if (annexllyNameExists?.id)
@@ -96,14 +97,14 @@ const createAnnexllyHandler = async (req, reply) => {
       );
 
     const id = ulid();
-    const newPath = `/${user.username}/${name}`;
+    const newPath = `/${user.username}/${formattedName}`;
     await Annexlly.create({
       id,
       newPath,
       defaultUrl,
       userId,
       numOfClicks: 0,
-      name,
+      name: formattedName,
     });
 
     return reply.send({ msg: "successfully created" });
@@ -118,12 +119,13 @@ const updateAnnexllyHandler = async (req, reply) => {
   const { id } = req.params;
 
   try {
+    const formattedName = name.toLowerCase();
     const annexlly = await Annexlly.findOne({ id, userId });
     if (!annexlly)
       return sendError(404, "This annexlly link does not exist", reply);
 
     const annexllyNameExists = await Annexlly.findOne({
-      name,
+      name: formattedName,
       userId,
     });
     if (annexllyNameExists && annexllyNameExists.id !== id)
@@ -151,13 +153,13 @@ const updateAnnexllyHandler = async (req, reply) => {
         reply
       );
 
-    const newPath = `/${user.username}/${name}`;
+    const newPath = `/${user.username}/${formattedName}`;
     await Annexlly.findOneAndUpdate(
       { id },
       {
         newPath,
         defaultUrl,
-        name,
+        name: formattedName,
       }
     );
 

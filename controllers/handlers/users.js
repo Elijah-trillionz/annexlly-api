@@ -108,7 +108,9 @@ const updateUsernameHandler = async (req, reply) => {
     if (!username)
       return sendError(400, "Username property must have a value", reply);
 
-    const usernameExists = await Users.findOne({ username });
+    const usernameExists = await Users.findOne({
+      username: username.toLowerCase(),
+    });
     if (usernameExists && usernameExists.id !== id) {
       return sendError(
         400,
@@ -119,7 +121,10 @@ const updateUsernameHandler = async (req, reply) => {
       return sendError(400, "This username is already in use by you", reply);
     }
 
-    const user = await Users.findOneAndUpdate({ id }, { username });
+    const user = await Users.findOneAndUpdate(
+      { id },
+      { username: username.toLowerCase() }
+    );
     if (!user)
       return sendError(
         401,
