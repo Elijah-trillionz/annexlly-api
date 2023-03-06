@@ -109,6 +109,7 @@ const createAnnexllyHandler = async (req, reply) => {
 
     return reply.send({ msg: "successfully created" });
   } catch (e) {
+    console.log(e);
     return sendError(500, "Server error", reply);
   }
 };
