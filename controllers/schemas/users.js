@@ -1,7 +1,7 @@
 const typeString = { type: "string" };
 
 const registerViaGoogleSchema = {
-  query: {
+  body: {
     type: "object",
     required: ["code"],
     properties: {

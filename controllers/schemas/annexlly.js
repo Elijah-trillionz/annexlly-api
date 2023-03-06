@@ -10,7 +10,6 @@ const AnnexllySchema = {
     newPath: typeString,
     numOfClicks: { type: "number" },
     createdAt: { type: "string", format: "date-time" },
-    userId: typeString,
   },
 };
 

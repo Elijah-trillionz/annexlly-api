@@ -26,7 +26,7 @@ const updateUsernameOpts = {
 };
 
 const usersRoutes = (fastify, opts, done) => {
-  fastify.get("/signin", registerViaGoogleOpts);
+  fastify.post("/signin", registerViaGoogleOpts);
 
   // temp
   fastify.get("/register/callback", (req, reply) => {

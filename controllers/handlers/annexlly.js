@@ -32,8 +32,6 @@ const getAllAnnexllyHandler = async (req, reply) => {
   const { id: userId } = req.user;
   try {
     const annexlly = await Annexlly.find({ userId });
-    if (annexlly.length <= 0)
-      return sendError(404, "You have no annexlly links yet", reply);
 
     return reply.send(annexlly);
   } catch (e) {
@@ -61,6 +59,10 @@ const createAnnexllyHandler = async (req, reply) => {
   const { name, defaultUrl } = req.body;
 
   try {
+    const userAnnexlly = await Annexlly.find({ userId });
+    if (userAnnexlly.length >= 3)
+      return sendError(400, "You have created your maximum annexlly", reply);
+
     if (!validUrl.isWebUri(defaultUrl))
       return sendError(400, "Url is not valid", reply);
 

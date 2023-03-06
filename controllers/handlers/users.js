@@ -8,7 +8,7 @@ const sendError = (statusCode, msg, replyCb) => {
 };
 
 const registerViaGoogleHandler = async (req, reply) => {
-  const { code } = req.query;
+  const { code } = req.body;
   try {
     const accessToken = await exchangeCodeForToken(code);
     if (accessToken.error) return sendError(400, "Invalid code", reply);
